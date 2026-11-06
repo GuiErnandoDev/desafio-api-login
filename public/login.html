@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Entrar ·API-Login</title>
+  <style>
+    :root {
+      --fundo: #f4efe9;
+      --cartao: #ffffff;
+      --texto: #2b2622;
+      --suave: #6f665e;
+      --borda: #ddd3c8;
+      --destaque: #b5532f;
+      --destaque-escuro: #94401f;
+      --erro-fundo: #fdecea;
+      --erro-texto: #9f2a1c;
+      --ok-fundo: #e8f4ec;
+      --ok-texto: #1f6b3a;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px 16px;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      color: var(--texto);
+      background: radial-gradient(circle at 20% 10%, #fbe9dc 0, transparent 45%),
+                  radial-gradient(circle at 85% 90%, #ecdcc9 0, transparent 40%),
+                  var(--fundo);
+    }
+    .cartao {
+      width: 100%;
+      max-width: 440px;
+      background: var(--cartao);
+      border: 1px solid var(--borda);
+      border-radius: 18px;
+      padding: 32px 28px;
+      box-shadow: 0 18px 40px rgba(80, 50, 30, 0.12);
+    }
+    .marca { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+    .logo {
+      width: 38px; height: 38px; border-radius: 10px;
+      background: var(--destaque); color: #fff;
+      display: grid; place-items: center; font-weight: 700; font-size: 15px;
+    }
+    .marca span { font-weight: 600; letter-spacing: 0.2px; }
+    h1 { font-size: 24px; margin: 0 0 4px; }
+    .sub { margin: 0 0 22px; color: var(--suave); font-size: 14px; }
+    label { display: block; font-size: 13px; font-weight: 600; margin: 14px 0 6px; }
+    .campo { position: relative; }
+    input {
+      width: 100%;
+      padding: 12px 14px;
+      font-size: 15px;
+      color: var(--texto);
+      background: #fff;
+      border: 1px solid var(--borda);
+      border-radius: 10px;
+      outline: none;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    input:focus { border-color: var(--destaque); box-shadow: 0 0 0 3px rgba(181, 83, 47, .18); }
+    .campo input { padding-right: 78px; }
+    .ver {
+      position: absolute; right: 6px; top: 50%; transform: translateY(-50%);
+      border: 0; background: transparent; color: var(--destaque);
+      font-size: 13px; font-weight: 600; padding: 8px 10px; cursor: pointer; border-radius: 8px;
+    }
+    .ver:hover { background: #fbeee7; }
+    button.principal {
+      width: 100%; margin-top: 22px; padding: 13px;
+      font-size: 15px; font-weight: 600; color: #fff;
+      background: var(--destaque); border: 0; border-radius: 10px; cursor: pointer;
+      transition: background .15s, transform .05s;
+    }
+    button.principal:hover { background: var(--destaque-escuro); }
+    button.principal:active { transform: translateY(1px); }
+    button.principal:disabled { opacity: .65; cursor: wait; }
+    button.secundario {
+      padding: 10px 14px; font-size: 14px; font-weight: 600;
+      color: var(--destaque); background: #fff;
+      border: 1px solid var(--destaque); border-radius: 10px; cursor: pointer;
+    }
+    button.secundario:hover { background: #fbeee7; }
+    button.sair { color: var(--suave); border-color: var(--borda); }
+    button.sair:hover { background: #f4efe9; }
+    .aviso { margin-top: 16px; padding: 11px 13px; border-radius: 10px; font-size: 14px; display: none; }
+    .aviso.erro { display: block; background: var(--erro-fundo); color: var(--erro-texto); }
+    .aviso.ok { display: block; background: var(--ok-fundo); color: var(--ok-texto); }
+    .dica { margin-top: 18px; font-size: 12.5px; color: var(--suave); text-align: center; }
+    .dica code { background: #f4efe9; padding: 2px 6px; border-radius: 6px; }
+    .oculto { display: none !important; }
+
+    .selo { display: inline-block; font-size: 12px; font-weight: 600; padding: 4px 10px;
+            border-radius: 999px; background: var(--ok-fundo); color: var(--ok-texto); margin-bottom: 10px; }
+    h2 { font-size: 13px; font-weight: 700; color: var(--suave); margin: 22px 0 8px; }
+    textarea, pre {
+      width: 100%; margin: 0; padding: 12px; font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+      font-size: 12.5px; line-height: 1.5; color: var(--texto);
+      background: #faf7f3; border: 1px solid var(--borda); border-radius: 10px;
+    }
+    textarea { resize: none; word-break: break-all; }
+    pre { overflow-x: auto; white-space: pre-wrap; word-break: break-word; }
+    .acoes { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .meta { font-size: 13px; color: var(--suave); margin-top: 8px; }
+  </style>
+</head>
+<body>
+  <main class="cartao">
+    <div class="marca"><div class="logo" aria-hidden="true">PI</div><span>API-Login</span></div>
+
+    <!-- TELA 1: formulário de login -->
+    <section id="tela-login">
+      <h1>Entrar</h1>
+      <p class="sub">Use seu e-mail e senha para receber o token de acesso da API.</p>
+
+      <form id="formulario" novalidate>
+        <label for="email">E-mail</label>
+        <input id="email" name="email" type="email" autocomplete="username" placeholder="voce@exemplo.com" required>
+
+        <label for="senha">Senha</label>
+        <div class="campo">
+          <input id="senha" name="senha" type="password" autocomplete="current-password" placeholder="Sua senha" required>
+          <button type="button" class="ver" id="ver" aria-label="Mostrar ou ocultar a senha">Mostrar</button>
+        </div>
+
+        <button type="submit" class="principal" id="entrar">Entrar</button>
+        <div id="aviso" class="aviso" role="alert" aria-live="polite"></div>
+      </form>
+
+      <p class="dica">Usuário de teste: <code>admin@pi.com</code> · senha <code>123456</code></p>
+    </section>
+
+    <!-- TELA 2: depois do login (mostra o access_token recebido) -->
+    <section id="tela-logado" class="oculto">
+      <span class="selo">Login realizado</span>
+      <h1 id="ola">Olá!</h1>
+      <p class="sub" id="email-logado"></p>
+
+      <h2>access_token recebido da API</h2>
+      <textarea id="token" rows="5" readonly aria-label="access_token"></textarea>
+      <p class="meta" id="meta"></p>
+      <div class="acoes">
+        <button type="button" class="secundario" id="copiar">Copiar token</button>
+        <button type="button" class="secundario" id="testar">Testar rota protegida</button>
+        <button type="button" class="secundario sair" id="sair">Sair</button>
+      </div>
+
+      <h2>O que tem dentro do token</h2>
+      <pre id="conteudo"></pre>
+
+      <div id="bloco-teste" class="oculto">
+        <h2 id="titulo-teste">Resposta de GET /api/auth/me</h2>
+        <pre id="resposta-teste"></pre>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Se a página for aberta direto do arquivo (file://), fala com a API em localhost:3000.
+    // Servida pela própria API (http://localhost:3000/login.html), usa o mesmo endereço.
+    const API = location.protocol === 'file:' ? 'http://localhost:3000' : '';
+    const CHAVE = 'access_token';
+    const $ = (id) => document.getElementById(id);
+
+    // ---------- utilidades ----------
+    function decodificarParte(parte) {
+      const base64 = parte.replace(/-/g, '+').replace(/_/g, '/').padEnd(Math.ceil(parte.length / 4) * 4, '=');
+      const bytes = Uint8Array.from(atob(base64), (c) => c.charCodeAt(0));
+      return JSON.parse(new TextDecoder().decode(bytes));
+    }
+
+    function conteudoDoToken(token) {
+      try {
+        const [cabecalho, corpo] = token.split('.');
+        const dados = decodificarParte(corpo);
+        const exibir = { cabecalho: decodificarParte(cabecalho), dados };
+        if (dados.exp) exibir.expira_em = new Date(dados.exp * 1000).toLocaleString('pt-BR');
+        return JSON.stringify(exibir, null, 2);
+      } catch {
+        return 'Não foi possível decodificar o token.';
+      }
+    }
+
+    function aviso(texto, tipo) {
+      const caixa = $('aviso');
+      caixa.textContent = texto;               // textContent: nunca interpreta HTML (evita XSS)
+      caixa.className = texto ? `aviso ${tipo}` : 'aviso';
+    }
+
+    // ---------- trocar de tela ----------
+    function mostrarLogin() {
+      $('tela-logado').classList.add('oculto');
+      $('tela-login').classList.remove('oculto');
+      $('senha').value = '';
+      $('email').focus();
+    }
+
+    function mostrarLogado(token, usuario, expiresIn) {
+      $('tela-login').classList.add('oculto');
+      $('tela-logado').classList.remove('oculto');
+      $('ola').textContent = `Olá, ${usuario.nome}!`;
+      $('email-logado').textContent = usuario.email;
+      $('token').value = token;
+      $('meta').textContent = expiresIn
+        ? `token_type: Bearer · expira em ${Math.round(expiresIn / 60)} min`
+        : 'token_type: Bearer';
+      $('conteudo').textContent = conteudoDoToken(token);
+      $('bloco-teste').classList.add('oculto');
+    }
+
+    // ---------- login ----------
+    $('formulario').addEventListener('submit', async (evento) => {
+      evento.preventDefault();
+      aviso('');
+      const email = $('email').value.trim();
+      const senha = $('senha').value;
+      if (!email || !senha) return aviso('Preencha o e-mail e a senha.', 'erro');
+
+      const botao = $('entrar');
+      botao.disabled = true;
+      botao.textContent = 'Entrando...';
+      try {
+        const resposta = await fetch(`${API}/api/auth/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, senha }),
+        });
+        const dados = await resposta.json().catch(() => ({}));
+
+        if (resposta.ok) {
+          localStorage.setItem(CHAVE, dados.access_token);   // guarda o token neste navegador
+          mostrarLogado(dados.access_token, dados.user, dados.expires_in);
+        } else if (resposta.status === 401) {
+          aviso('E-mail ou senha inválidos.', 'erro');
+        } else {
+          aviso(dados.erro || `Erro ${resposta.status} ao entrar.`, 'erro');
+        }
+      } catch {
+        aviso('Não consegui falar com a API. Ela está rodando? (npm start)', 'erro');
+      } finally {
+        botao.disabled = false;
+        botao.textContent = 'Entrar';
+      }
+    });
+
+    // ---------- rota protegida: envia o token no cabeçalho Authorization ----------
+    async function consultarMe(token) {
+      const resposta = await fetch(`${API}/api/auth/me`, { headers: { Authorization: `Bearer ${token}` } });
+      return { status: resposta.status, dados: await resposta.json().catch(() => ({})) };
+    }
+
+    $('testar').addEventListener('click', async () => {
+      const token = localStorage.getItem(CHAVE);
+      $('bloco-teste').classList.remove('oculto');
+      try {
+        const { status, dados } = await consultarMe(token);
+        $('titulo-teste').textContent = `Resposta de GET /api/auth/me (status ${status})`;
+        $('resposta-teste').textContent = JSON.stringify(dados, null, 2);
+      } catch {
+        $('resposta-teste').textContent = 'Não consegui falar com a API.';
+      }
+    });
+
+    $('copiar').addEventListener('click', async () => {
+      const botao = $('copiar');
+      try {
+        await navigator.clipboard.writeText($('token').value);
+        botao.textContent = 'Copiado!';
+      } catch {
+        $('token').select();
+        botao.textContent = 'Selecionado: use Ctrl+C';
+      }
+      setTimeout(() => { botao.textContent = 'Copiar token'; }, 1800);
+    });
+
+    $('sair').addEventListener('click', () => {
+      localStorage.removeItem(CHAVE);
+      aviso('Você saiu.', 'ok');
+      mostrarLogin();
+    });
+
+    $('ver').addEventListener('click', () => {
+      const campo = $('senha');
+      const mostrar = campo.type === 'password';
+      campo.type = mostrar ? 'text' : 'password';
+      $('ver').textContent = mostrar ? 'Ocultar' : 'Mostrar';
+    });
+
+    // ---------- ao abrir a página: se já existe token salvo e ele ainda vale, entra direto ----------
+    (async function iniciar() {
+      const token = localStorage.getItem(CHAVE);
+      if (!token) return;
+      try {
+        const { status, dados } = await consultarMe(token);
+        if (status === 200) return mostrarLogado(token, dados, null);
+      } catch { /* API fora do ar: fica na tela de login */ }
+      localStorage.removeItem(CHAVE);   // token expirado ou inválido
+    })();
+  </script>
+</body>
+</html>

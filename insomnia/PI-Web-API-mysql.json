@@ -1,0 +1,503 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2026-10-28T23:43:06.000Z",
+  "__export_source": "insomnia.desktop.app:v8.6.1",
+  "resources": [
+    {
+      "_id": "wrk_piweb_mysql",
+      "parentId": null,
+      "modified": 1793230986074,
+      "created": 1793230986074,
+      "name": "API-Logingi (MySQL, etapa 1)",
+      "description": "Etapa 1: health, listar e criar prontos. consultar, atualizar e excluir respondem 501.",
+      "scope": "collection",
+      "_type": "workspace"
+    },
+    {
+      "_id": "fld_piweb_saude",
+      "parentId": "wrk_piweb_mysql",
+      "modified": 1793230986074,
+      "created": 1793230986074,
+      "name": "1 · Saúde",
+      "description": "Confere API e banco.",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": 1000,
+      "_type": "request_group"
+    },
+    {
+      "_id": "req_piweb_health",
+      "parentId": "fld_piweb_saude",
+      "modified": 1793230986074,
+      "created": 1793230986074,
+      "url": "http://localhost:3000/api/health",
+      "name": "GET health",
+      "description": "Esperado: 200 { status: ok, database: connected }. Com o MySQL desligado: 503 { status: erro, database: disconnected }.",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": 1000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "fld_piweb_leitura",
+      "parentId": "wrk_piweb_mysql",
+      "modified": 1793230986074,
+      "created": 1793230986074,
+      "name": "2 · Produtos — leitura",
+      "description": "",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": 2000,
+      "_type": "request_group"
+    },
+    {
+      "_id": "req_piweb_listar",
+      "parentId": "fld_piweb_leitura",
+      "modified": 1793230986074,
+      "created": 1793230986074,
+      "url": "http://localhost:3000/api/produtos",
+      "name": "GET produtos — listar()",
+      "description": "Esperado: 200 com a lista. Compare com SELECT * FROM produtos no MySQL Workbench.",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": 2000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "fld_piweb_criar",
+      "parentId": "wrk_piweb_mysql",
+      "modified": 1793230986074,
+      "created": 1793230986074,
+      "name": "3 · Produtos — criar (JSON no corpo)",
+      "description": "Abra a aba Body: o JSON enviado está em Body > JSON.",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": 3000,
+      "_type": "request_group"
+    },
+    {
+      "_id": "req_piweb_criar_ok",
+      "parentId": "fld_piweb_criar",
+      "modified": 1793230986074,
+      "created": 1793230986074,
+      "url": "http://localhost:3000/api/produtos",
+      "name": "POST criar — válido (201)",
+      "description": "Esperado: 201 + cabeçalho Location. A API limpa os espaços e põe o segmento em minúsculas (name = \"Cadinho de teste\", segmentId = \"laboratorio\"). Confira a nova linha no Workbench.",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"  Cadinho   de teste  \",\n  \"segmentId\": \" LABORATORIO \",\n  \"material\": \" Porcelana de alta alumina \",\n  \"description\": \"Peça criada pelo Insomnia.\",\n  \"price\": 12.5\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": 3000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_piweb_criar_semprec",
+      "parentId": "fld_piweb_criar",
+      "modified": 1793230986074,
+      "created": 1793230986074,
+      "url": "http://localhost:3000/api/produtos",
+      "name": "POST criar — sem preço (201)",
+      "description": "Esperado: 201 com price = null (o preço é opcional).",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"Peça sem preço\",\n  \"segmentId\": \"aquario\",\n  \"material\": \"Cerâmica porosa\",\n  \"description\": \"Preço ainda não definido.\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": 4000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_piweb_criar_nome",
+      "parentId": "fld_piweb_criar",
+      "modified": 1793230986074,
+      "created": 1793230986074,
+      "url": "http://localhost:3000/api/produtos",
+      "name": "POST criar — nome vazio (400)",
+      "description": "Esperado: 400 com campos: { name: \"É obrigatório.\" }.",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"   \",\n  \"segmentId\": \" LABORATORIO \",\n  \"material\": \" Porcelana de alta alumina \",\n  \"description\": \"Peça criada pelo Insomnia.\",\n  \"price\": 12.5\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": 5000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_piweb_criar_seg",
+      "parentId": "fld_piweb_criar",
+      "modified": 1793230986074,
+      "created": 1793230986074,
+      "url": "http://localhost:3000/api/produtos",
+      "name": "POST criar — segmento inexistente (400)",
+      "description": "Esperado: 400 com campos: { segmentId: ... }.",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"  Cadinho   de teste  \",\n  \"segmentId\": \"segmento-inexistente\",\n  \"material\": \" Porcelana de alta alumina \",\n  \"description\": \"Peça criada pelo Insomnia.\",\n  \"price\": 12.5\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": 6000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_piweb_criar_neg",
+      "parentId": "fld_piweb_criar",
+      "modified": 1793230986074,
+      "created": 1793230986074,
+      "url": "http://localhost:3000/api/produtos",
+      "name": "POST criar — preço negativo (400)",
+      "description": "Esperado: 400 com campos: { price: ... }.",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"  Cadinho   de teste  \",\n  \"segmentId\": \" LABORATORIO \",\n  \"material\": \" Porcelana de alta alumina \",\n  \"description\": \"Peça criada pelo Insomnia.\",\n  \"price\": -1\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": 7000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_piweb_criar_casas",
+      "parentId": "fld_piweb_criar",
+      "modified": 1793230986074,
+      "created": 1793230986074,
+      "url": "http://localhost:3000/api/produtos",
+      "name": "POST criar — preço com 3 casas (400)",
+      "description": "Esperado: 400 com campos: { price: ... }.",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"  Cadinho   de teste  \",\n  \"segmentId\": \" LABORATORIO \",\n  \"material\": \" Porcelana de alta alumina \",\n  \"description\": \"Peça criada pelo Insomnia.\",\n  \"price\": 1.234\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": 8000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_piweb_criar_longo",
+      "parentId": "fld_piweb_criar",
+      "modified": 1793230986074,
+      "created": 1793230986074,
+      "url": "http://localhost:3000/api/produtos",
+      "name": "POST criar — nome com 121 letras (400)",
+      "description": "Esperado: 400 (o limite de name é 120 caracteres).",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\",\n  \"segmentId\": \" LABORATORIO \",\n  \"material\": \" Porcelana de alta alumina \",\n  \"description\": \"Peça criada pelo Insomnia.\",\n  \"price\": 12.5\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": 9000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_piweb_criar_array",
+      "parentId": "fld_piweb_criar",
+      "modified": 1793230986074,
+      "created": 1793230986074,
+      "url": "http://localhost:3000/api/produtos",
+      "name": "POST criar — corpo não é objeto (400)",
+      "description": "Esperado: 400 com campos: { corpo: ... }.",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "[1, 2, 3]"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": 10000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_piweb_criar_malformado",
+      "parentId": "fld_piweb_criar",
+      "modified": 1793230986074,
+      "created": 1793230986074,
+      "url": "http://localhost:3000/api/produtos",
+      "name": "POST criar — JSON malformado (400)",
+      "description": "Esperado: 400 { erro: \"JSON inválido.\" }. O express.json recusa antes de a rota ser chamada.",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\"name\":"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": 11000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "fld_piweb_erros",
+      "parentId": "wrk_piweb_mysql",
+      "modified": 1793230986074,
+      "created": 1793230986074,
+      "name": "4 · Erros globais",
+      "description": "",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": 4000,
+      "_type": "request_group"
+    },
+    {
+      "_id": "req_piweb_rota404",
+      "parentId": "fld_piweb_erros",
+      "modified": 1793230986074,
+      "created": 1793230986074,
+      "url": "http://localhost:3000/api/nao-existe",
+      "name": "GET rota inexistente (404)",
+      "description": "Esperado: 404 { erro: \"Rota não encontrada.\" }.",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": 12000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "fld_piweb_etapa2",
+      "parentId": "wrk_piweb_mysql",
+      "modified": 1793230986074,
+      "created": 1793230986074,
+      "name": "5 · Etapa 2 (501 por enquanto)",
+      "description": "Previstas no diagrama e ainda não programadas.",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": 5000,
+      "_type": "request_group"
+    },
+    {
+      "_id": "req_piweb_consultar",
+      "parentId": "fld_piweb_etapa2",
+      "modified": 1793230986074,
+      "created": 1793230986074,
+      "url": "http://localhost:3000/api/produtos/1",
+      "name": "GET produtos/1 — consultar()",
+      "description": "Hoje: 501.",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": 13000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_piweb_atualizar",
+      "parentId": "fld_piweb_etapa2",
+      "modified": 1793230986074,
+      "created": 1793230986074,
+      "url": "http://localhost:3000/api/produtos/1",
+      "name": "PUT produtos/1 — atualizar()",
+      "description": "Hoje: 501.",
+      "method": "PUT",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"Cadinho atualizado\",\n  \"segmentId\": \" LABORATORIO \",\n  \"material\": \" Porcelana de alta alumina \",\n  \"description\": \"Peça criada pelo Insomnia.\",\n  \"price\": null\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": 14000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_piweb_excluir",
+      "parentId": "fld_piweb_etapa2",
+      "modified": 1793230986074,
+      "created": 1793230986074,
+      "url": "http://localhost:3000/api/produtos/1",
+      "name": "DELETE produtos/1 — excluir()",
+      "description": "Hoje: 501.",
+      "method": "DELETE",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": 15000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    }
+  ]
+}
